@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            max-width: 600px;
+            margin: auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #e9ecef;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message .user {
+            font-weight: bold;
+        }
+
+        .message .text {
+            padding: 8px 12px;
+            border-radius: 12px;
+            max-width: 70%;
+        }
+
+        .message.sent .text {
+            background-color: #007bff;
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .message.received .text {
+            background-color: #f1f1f1;
+            color: #333;
+            align-self: flex-start;
+        }
+
+        #input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        #input-container input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        #input-container button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #input-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="messages"></div>
+        <div id="input-container">
+            <input type="text" id="message-input" placeholder="Type a message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const messagesContainer = document.getElementById('messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+
+        function appendMessage(user, text, type) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', type);
+
+            const userElement = document.createElement('div');
+            userElement.classList.add('user');
+            userElement.textContent = user;
+
+            const textElement = document.createElement('div');
+            textElement.classList.add('text');
+            textElement.textContent = text;
+
+            messageElement.appendChild(userElement);
+            messageElement.appendChild(textElement);
+            messagesContainer.appendChild(messageElement);
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function handleSendMessage() {
+            const messageText = messageInput.value.trim();
+
+            if (messageText !== '') {
+                appendMessage('You', messageText, 'sent');
+                simulateResponse(messageText);
+                messageInput.value = '';
+            }
+        }
+
+        function simulateResponse(userMessage) {
+            setTimeout(() => {
+                appendMessage('Bot', `You said: "${userMessage}"`, 'received');
+            }, 1000);
+        }
+
+        sendButton.addEventListener('click', handleSendMessage);
+
+        messageInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
